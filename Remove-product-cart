@@ -1,0 +1,84 @@
+ $('.switch').click(function(){
+    $(this).toggleClass('active');
+    var variant_id = 41402959462609;
+    
+  if($('#username').is(":checked")==true){
+  console.log('remove');
+    var varient = 41402959462609;
+    var data = { updates: {} };
+    data.updates[varient] = 1
+     $.ajax({
+      type: "POST",
+      url: "/cart/change.js",
+      dataType: "json",
+      data: {
+        id: parseFloat(varient),
+        quantity: 0,
+      },
+success: function(cart) { 
+    var price = $('.cart__item-sub .money').html();
+    var itemId = price.substring(1, price.length);
+       console.log('lastprice----'+itemId);
+      var sec = 200.00;
+      var c = parseFloat(itemId) - parseFloat(sec);
+       console.log(c.toFixed(2));
+       var mystring = '$'+c.toFixed(2);
+        setTimeout(function () {
+        $('.cart__item-sub .conversion-bear-money').text(mystring);
+         }, 1000);
+      console.log('cart');
+ }
+   });
+        // let data = {
+        //   'items':[{
+        //     'id': variant_id,
+        //     'quantity': 1
+        //   }]
+        // };
+    
+  /*      fetch('/cart/change.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+        .then(response => {
+          return response.json();
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });*/
+
+      
+    }else{
+      console.log('added');
+      let data = {
+          'items':[{
+            'id': variant_id,
+            'quantity': 1
+          }]
+        };
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+      .then(response => {
+        var price = $('.cart__item-sub .money').html();
+        var itemId = price.substring(1, price.length);
+        var sec = 200.00;
+        var c =parseFloat(itemId) + parseFloat(sec);
+        var mystring = '$'+c;
+        setTimeout(function () {
+        $('.cart__item-sub .conversion-bear-money').text(mystring);
+         }, 1000);
+        console.log(mystring);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    }
+  });
